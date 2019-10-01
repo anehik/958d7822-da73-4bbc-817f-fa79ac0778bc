@@ -1,11 +1,10 @@
 import random
-
+import functools
+import time
 
 class Door(object):
-
     def __init__(self, value):
         self.value = value
-
     def __repr__(self):
         return "Door({value})".format(value=self.value)
 
@@ -73,11 +72,20 @@ class Host(object):
 
 
 def remember_function_output_decorator(func):
-    pass
+    def caching(func):
+        CACHE = {}
+
+        @functools.wraps(func)
+        def wrapper(self, **kwargs):
+            key = hash(frozenset(kwargs.items()))
+            if key in CACHE:
+                return CACHE[key]
+            CACHE[key] = func(self, **kwargs)
+            return wrapper(self, **kwargs)
+        return wrapper
 
 
 class Guest(object):
-
     class Strategy(object):
         RANDOM = "random"
         STAY = "stay"
@@ -119,7 +127,10 @@ class Guest(object):
         :return: the key of the selected option (i.e., door_name)
         """
         # TODO: implement 'change' strategy
-        raise NotImplementedError
+        #raise NotImplementedError
+        options.pop(self.memory[-1])
+        sel_opt_key = self._choose_strategy_random(options=options)
+        return sel_opt_key
 
     def choose(self, options, strategy):
         if strategy == Guest.Strategy.RANDOM:
