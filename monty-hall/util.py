@@ -72,17 +72,18 @@ class Host(object):
 
 
 def remember_function_output_decorator(func):
-    def caching(func):
-        CACHE = {}
+    pass
+   # def caching(func):
+    #    CACHE = {}
 
-        @functools.wraps(func)
-        def wrapper(self, **kwargs):
-            key = hash(frozenset(kwargs.items()))
-            if key in CACHE:
-                return CACHE[key]
-            CACHE[key] = func(self, **kwargs)
-            return wrapper(self, **kwargs)
-        return wrapper
+#        @functools.wraps(func)
+ #       def wrapper(self, **kwargs):
+  #          key = hash(frozenset(kwargs.items()))
+   #         if key in CACHE:
+    #            return CACHE[key]
+     #       CACHE[key] = func(self, **kwargs)
+      #      return wrapper(self, **kwargs)
+       # return wrapper
 
 
 class Guest(object):
